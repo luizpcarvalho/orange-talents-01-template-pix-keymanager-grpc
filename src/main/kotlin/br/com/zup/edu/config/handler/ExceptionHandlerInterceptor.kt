@@ -1,6 +1,5 @@
 package br.com.zup.edu.config.handler
 
-import io.grpc.BindableService
 import io.grpc.stub.StreamObserver
 import io.micronaut.aop.MethodInterceptor
 import io.micronaut.aop.MethodInvocationContext
@@ -21,6 +20,7 @@ class ExceptionHandlerInterceptor(@Inject private val resolver: ExceptionHandler
             logger.error("Handling the exception '${e.javaClass.name}' while processing the call: ${context.targetMethod}", e)
 
             val handler = resolver.resolve(e)
+            println("Entrou aqui $handler.toString()")
             val status = handler.handle(e)
             val observer = context.parameterValues[1] as StreamObserver<*>
             observer.onError(status.asRuntimeException())

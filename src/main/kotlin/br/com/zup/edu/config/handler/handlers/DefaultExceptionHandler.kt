@@ -3,7 +3,6 @@ package br.com.zup.edu.config.handler.handlers
 import br.com.zup.edu.config.handler.ExceptionHandler
 import br.com.zup.edu.config.handler.ExceptionHandler.StatusWithDetails
 import io.grpc.Status
-import java.lang.IllegalStateException
 import javax.inject.Singleton
 
 @Singleton
@@ -16,7 +15,7 @@ class DefaultExceptionHandler: ExceptionHandler<Exception> {
     }
 
     override fun supports(e: Exception): Boolean {
-        return e is IllegalStateException
+        return e is UnknownError
     }
 
 }
