@@ -15,7 +15,7 @@ class DefaultExceptionHandler: ExceptionHandler<Exception> {
     }
 
     override fun supports(e: Exception): Boolean {
-        return e is UnknownError
+        return e is NullPointerException
     }
 
 }

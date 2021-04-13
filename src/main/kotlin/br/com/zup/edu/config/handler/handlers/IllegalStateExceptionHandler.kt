@@ -9,7 +9,6 @@ import javax.inject.Singleton
 class IllegalStateExceptionHandler: ExceptionHandler<IllegalStateException> {
 
     override fun handle(e: IllegalStateException): StatusWithDetails {
-        println("Disparou Illegal Exception")
         return StatusWithDetails(Status.FAILED_PRECONDITION
             .withDescription(e.message)
             .withCause(e))

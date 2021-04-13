@@ -162,6 +162,32 @@ internal class RegistraChaveEndpointTest(
         }
     }
 
+    @Test
+    fun `nao deve registrar chave pix quando falhar ao registrar no Banco Central`() {
+        // cenário
+        `when`(itauClient.buscaContaPorTipoConta(clienteId = CLIENTE_ID.toString(), tipo = "CONTA_CORRENTE"))
+            .thenReturn(HttpResponse.ok(dadosDaContaResponse()))
+
+        `when`(bcbClient.create(dadosCreatePixKeyRequest()))
+            .thenReturn(HttpResponse.badRequest())
+
+        // ação
+        val thrown = assertThrows<StatusRuntimeException> {
+            grpcClient.registra(RegistrarChavePixRequest.newBuilder()
+                .setClienteId(CLIENTE_ID.toString())
+                .setTipoChave(TipoChave.EMAIL)
+                .setValorChave("luiz@gmail.com")
+                .setTipoConta(TipoConta.CONTA_CORRENTE)
+                .build())
+        }
+
+        // validação
+        with(thrown) {
+            assertEquals(Status.FAILED_PRECONDITION.code, this.status.code)
+            assertEquals("Erro ao registrar chave Pix no Banco Central do Brasil (BCB)", this.status.description)
+        }
+    }
+
     @MockBean(ERPItauClient::class)
     fun itauClient(): ERPItauClient? {
         return mock(ERPItauClient::class.java)
