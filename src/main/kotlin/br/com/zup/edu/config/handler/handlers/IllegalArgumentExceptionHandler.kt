@@ -9,16 +9,16 @@ import javax.inject.Singleton
 import javax.validation.ConstraintViolationException
 
 @Singleton
-class ConstraintViolationExceptionHandler: ExceptionHandler<ConstraintViolationException> {
+class IllegalArgumentExceptionHandler: ExceptionHandler<IllegalArgumentException> {
 
-    override fun handle(e: ConstraintViolationException): StatusWithDetails {
+    override fun handle(e: IllegalArgumentException): StatusWithDetails {
         return StatusWithDetails(Status.INVALID_ARGUMENT
             .withDescription(e.message)
             .withCause(e))
     }
 
     override fun supports(e: Exception): Boolean {
-        return e is ConstraintViolationException
+        return e is IllegalArgumentException
     }
 
 }
